@@ -1,5 +1,7 @@
 # API contract: web app ↔ backend
 
+> **MVP scope (Nov 17):** thesis matching (`POST /match`, `/samples`), plus `/search` and `/technology/{id}`. The patent, inventor, score-override, review and chat endpoints below are kept for reference, but their pages are hidden in the MVP.
+
 This document lists every HTTP endpoint the web app calls and the exact JSON it expects back. The FastAPI backend should implement these endpoints. Until it does, the web app serves the same contract from a built-in mock (`src/app/api/mock/**`).
 
 - **Source of truth for types:** [`src/lib/api/types.ts`](../src/lib/api/types.ts). If this document and that file disagree, the file wins. Please update both together.
@@ -119,6 +121,8 @@ Ranked search across technologies, patents and inventors.
   "auditLog": []
 }
 ```
+
+`synthetic` (optional boolean, default `false`): `true` for made-up demo data. The UI shows a "Synthetic demo data" badge, and the backend builds no external links for these records.
 
 **IP-score rules.** The web app checks these and shows a warning if they don't hold:
 
@@ -262,6 +266,70 @@ Side effects the web app relies on:
 - Both decisions append an `AuditEntry` with `action: "match_decision"` to the technology's audit log.
 
 **422** if the match was already decided or the body is invalid. **404** if the id is unknown.
+
+## `POST /match`
+
+**The MVP feature.** Upload an investment-thesis PDF and get every technology in the database labelled and ranked against it. The backend sends the PDF plus each technology's merged TTO + USPTO record to Claude in one call. Claude scores four fits and quotes the record behind each score. The backend then checks every quote against the record, so quotes are verified outside the model.
+
+**Request:** `multipart/form-data` with one field, `file`: a PDF of at most 10 MB.
+
+**200**: `MatchResponse`
+
+```json
+{
+  "thesisName": "oncology-fund-thesis.pdf",
+  "thesisSha256": "9f2c…",
+  "thesisSummary": "Early-stage immuno-oncology therapeutics; wants exclusive licenses…",
+  "model": "claude-opus-5-5",
+  "source": "saved_demo",
+  "generatedAt": "2026-11-17T16:02:11+00:00",
+  "matches": [
+    {
+      "technology": { "id": "DEMO-01", "title": "Tumor-Homing CAR T Cells…", "ttoCaseNumber": "DEMO-01", "status": "available", "ipScore": 87.0 },
+      "category": "Life Sciences",
+      "label": "strong",
+      "totalScore": 8,
+      "summary": "Armored CAR T platform for solid tumors with a granted patent.",
+      "fits": [
+        {
+          "key": "area",
+          "question": "Area fit: is it in the sectors or therapeutic areas the thesis targets?",
+          "score": 2,
+          "reason": "A CAR T cell therapy for solid tumors.",
+          "quote": "This CAR T platform releases IL-12 only inside the tumor",
+          "quoteVerified": true
+        }
+      ]
+    }
+  ],
+  "unassessedIds": []
+}
+```
+
+- **`label`:** `strong` | `potential` | `none`.
+- **`fits`:** always four entries, `area`, `problem`, `stage` and `deal`, each scored 0 (no), 1 (partly) or 2 (clearly). `totalScore` is their sum (0–8).
+- **Order of `matches`:** strong, then potential, then none; within a label, higher `totalScore` first.
+- **`quoteVerified`:** `true` only if the quote appears word for word in that technology's record. The UI marks unverified quotes.
+- **`source`:**
+  - `saved_demo` means a stored result for one of the sample theses (matched by the PDF's sha256). It needs no API key and costs nothing.
+  - `live` means Claude was called just now.
+- **`unassessedIds`:** technologies Claude skipped. They are listed here and never filled in.
+
+**Errors:**
+- `422` when the file isn't a PDF or is over 10 MB, or when Claude declines the document.
+- `503` when there's no Anthropic API key (`ANTHROPIC_API_KEY` in the backend's `.env.local`) or no technologies in the database.
+- `429` when Claude is rate-limited.
+- `502` for other Claude API errors.
+
+## `GET /samples`
+
+**200**: `[{ "name": "oncology-fund-thesis.pdf", "title": "Sample: immuno-oncology therapeutics fund" }, …]`
+
+These are the sample theses the UI offers as "Try a sample" buttons.
+
+## `GET /samples/{name}`
+
+**200**: the sample PDF (`application/pdf`). **404** for any name not in `GET /samples`.
 
 ## `POST /chat`
 

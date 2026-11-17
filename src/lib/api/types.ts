@@ -159,6 +159,8 @@ export interface TechnologyDetail extends Omit<Technology, "ipScore"> {
   ipScore: IpScore;
   similar: SimilarTechnology[];
   auditLog: AuditEntry[];
+  /** True for made-up demo data: never link it to real patent or TTO pages. */
+  synthetic?: boolean;
 }
 
 export interface PatentDetail extends Patent {
@@ -247,6 +249,53 @@ export type ChatEvent =
   | { type: "citation"; citation: Citation }
   | { type: "error"; message: string }
   | { type: "done" };
+
+// ---------------------------------------------------------------- thesis matching
+
+export type MatchLabel = "strong" | "potential" | "none";
+export type FitKey = "area" | "problem" | "stage" | "deal";
+
+export interface FitScore {
+  key: FitKey;
+  /** The question Claude answered, e.g. "Area fit: is it in the sectors ...?" */
+  question: string;
+  /** 0 = no, 1 = partly, 2 = clearly. */
+  score: number;
+  reason: string;
+  /** Evidence copied from the invention record ("" if none). */
+  quote: string;
+  /** True only if the quote really appears in the record (checked by the backend). */
+  quoteVerified: boolean;
+}
+
+export interface TechnologyMatch {
+  technology: TechnologySummary;
+  category: string | null;
+  label: MatchLabel;
+  /** Sum of the four fit scores, 0–8. */
+  totalScore: number;
+  summary: string;
+  fits: FitScore[];
+}
+
+export interface MatchResponse {
+  thesisName: string;
+  thesisSha256: string;
+  thesisSummary: string;
+  model: string;
+  /** saved_demo = a stored result for a sample thesis (no API key needed). */
+  source: "saved_demo" | "live";
+  generatedAt: string;
+  /** Ranked: strong, then potential, then none; higher totalScore first. */
+  matches: TechnologyMatch[];
+  /** Inventions Claude did not assess. */
+  unassessedIds: string[];
+}
+
+export interface SampleThesis {
+  name: string;
+  title: string;
+}
 
 // ---------------------------------------------------------------- errors
 

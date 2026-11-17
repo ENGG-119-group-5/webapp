@@ -4,6 +4,8 @@ import type {
   ChatRequest,
   InventorDetail,
   MatchCandidate,
+  MatchResponse,
+  SampleThesis,
   MatchDecisionRequest,
   MatchListResponse,
   MatchStatus,
@@ -66,7 +68,8 @@ async function send(url: string, init?: RequestInit): Promise<Response> {
       ...init,
       headers: {
         Accept: "application/json",
-        ...(init?.body ? { "Content-Type": "application/json" } : {}),
+        // FormData (file upload) sets its own multipart Content-Type.
+        ...(typeof init?.body === "string" ? { "Content-Type": "application/json" } : {}),
         ...init?.headers,
       },
     });
@@ -138,6 +141,28 @@ export const api = {
 
   decideMatch(matchId: string, body: MatchDecisionRequest): Promise<MatchCandidate> {
     return postJson(buildUrl(`/review/matches/${id(matchId)}`), body);
+  },
+
+  /** Match an investment-thesis PDF against every technology (can take a minute). */
+  async match(file: Blob, filename: string, signal?: AbortSignal): Promise<MatchResponse> {
+    const form = new FormData();
+    form.append("file", file, filename);
+    const res = await send(buildUrl("/match"), { method: "POST", body: form, signal });
+    return (await res.json()) as MatchResponse;
+  },
+
+  listSamples(signal?: AbortSignal): Promise<SampleThesis[]> {
+    return getJson(buildUrl("/samples"), signal);
+  },
+
+  /** Download a sample thesis PDF (to show it, or to send it to match()). */
+  async getSample(name: string): Promise<Blob> {
+    const res = await send(buildUrl(`/samples/${id(name)}`), { headers: { Accept: "application/pdf" } });
+    return res.blob();
+  },
+
+  sampleUrl(name: string): string {
+    return buildUrl(`/samples/${id(name)}`);
   },
 
   /** Streams the answer to a chat question as ChatEvents. */
