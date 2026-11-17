@@ -64,7 +64,7 @@ export function MatchView() {
         <div className="flex items-center gap-3 rounded-xl border p-4 text-sm" aria-live="polite">
           <Loader2Icon className="size-4 animate-spin text-primary" aria-hidden />
           <span>
-            Reading <b>{state.name}</b> and scoring every invention. A new thesis takes about a minute.
+            Reading <b>{state.name}</b> and scoring every invention. A new thesis takes one to three minutes.
           </span>
         </div>
       )}

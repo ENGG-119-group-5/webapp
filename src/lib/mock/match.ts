@@ -7,8 +7,8 @@ import type { FitKey, FitScore, MatchLabel, MatchResponse, SampleThesis } from "
 import { getTechnology } from "./db";
 
 export const MOCK_SAMPLES: SampleThesis[] = [
-  { name: "oncology-fund-thesis.pdf", title: "Sample: immuno-oncology therapeutics fund" },
-  { name: "climate-hardware-thesis.pdf", title: "Sample: climate and energy hardware fund" },
+  { name: "immune-engineering-thesis.pdf", title: "Sample: immune-engineering therapeutics fund" },
+  { name: "electrification-materials-thesis.pdf", title: "Sample: electrification materials fund" },
 ];
 
 /** Tiny placeholder file; the mock never reads it. */

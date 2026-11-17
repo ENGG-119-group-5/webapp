@@ -122,7 +122,7 @@ Ranked search across technologies, patents and inventors.
 }
 ```
 
-`synthetic` (optional boolean, default `false`): `true` for made-up demo data. The UI shows a "Synthetic demo data" badge, and the backend builds no external links for these records.
+`synthetic` (optional boolean, default `false`): `true` for made-up data. The UI shows a "Synthetic demo data" badge, and the backend builds no external links for these records. The current demo dataset is real, so it is always `false` there.
 
 **IP-score rules.** The web app checks these and shows a warning if they don't hold:
 
@@ -277,26 +277,26 @@ Side effects the web app relies on:
 
 ```json
 {
-  "thesisName": "oncology-fund-thesis.pdf",
-  "thesisSha256": "9f2c…",
-  "thesisSummary": "Early-stage immuno-oncology therapeutics; wants exclusive licenses…",
+  "thesisName": "electrification-materials-thesis.pdf",
+  "thesisSha256": "443b…",
+  "thesisSummary": "Foxglove Fund II leads $3-12M seed and Series A rounds in advanced-materials spinouts…",
   "model": "claude-opus-5-5",
   "source": "saved_demo",
-  "generatedAt": "2026-11-17T16:02:11+00:00",
+  "generatedAt": "2026-11-17T17:27:31+00:00",
   "matches": [
     {
-      "technology": { "id": "DEMO-01", "title": "Tumor-Homing CAR T Cells…", "ttoCaseNumber": "DEMO-01", "status": "available", "ipScore": 87.0 },
-      "category": "Life Sciences",
+      "technology": { "id": "2024-004", "title": "Enhanced magnetic performance of Manganese Aluminum alloy via Titanium addition", "ttoCaseNumber": "2024-004", "status": "available", "ipScore": 72.0 },
+      "category": "Physical Sciences",
       "label": "strong",
       "totalScore": 8,
-      "summary": "Armored CAR T platform for solid tumors with a granted patent.",
+      "summary": "This rare-earth-free Mn-Al-Ti magnet has a measured BHmax gain and a filed US application, squarely matching the critical-materials thesis.",
       "fits": [
         {
           "key": "area",
           "question": "Area fit: is it in the sectors or therapeutic areas the thesis targets?",
           "score": 2,
-          "reason": "A CAR T cell therapy for solid tumors.",
-          "quote": "This CAR T platform releases IL-12 only inside the tumor",
+          "reason": "A rare-earth-free permanent magnet is an explicit target.",
+          "quote": "permanent magnet (PM) composed of a manganese-aluminum-titanium (Mn-Al-Ti) alloy",
           "quoteVerified": true
         }
       ]
@@ -323,7 +323,7 @@ Side effects the web app relies on:
 
 ## `GET /samples`
 
-**200**: `[{ "name": "oncology-fund-thesis.pdf", "title": "Sample: immuno-oncology therapeutics fund" }, …]`
+**200**: `[{ "name": "immune-engineering-thesis.pdf", "title": "Sample: immune-engineering therapeutics fund" }, { "name": "electrification-materials-thesis.pdf", "title": "Sample: electrification materials fund" }]`
 
 These are the sample theses the UI offers as "Try a sample" buttons.
 
