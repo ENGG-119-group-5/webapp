@@ -48,7 +48,7 @@ export function SearchView() {
     if (nextQ.trim()) sp.set("q", nextQ.trim());
     if (nextType !== "all") sp.set("type", nextType);
     const qs = sp.toString();
-    router.replace(qs ? `/?${qs}` : "/", { scroll: false });
+    router.replace(qs ? `/search?${qs}` : "/search", { scroll: false });
   }
 
   return (

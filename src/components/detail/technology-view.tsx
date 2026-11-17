@@ -14,6 +14,9 @@ import { Section } from "@/components/section";
 import { ErrorState, LoadingDetail } from "@/components/states";
 import { DetailHeader } from "./detail-header";
 
+/** Score overrides and their audit log are out of the MVP; flip to bring them back. */
+const SHOW_SCORE_OVERRIDES = false;
+
 export function TechnologyView() {
   const { id } = useParams<{ id: string }>();
   const { data: tech, error, loading, reload, setData } = useApi(`technology:${id}`, (signal) =>
@@ -31,6 +34,11 @@ export function TechnologyView() {
         badges={
           <>
             <StatusBadge status={tech.status} />
+            {tech.synthetic && (
+              <Badge variant="outline" className="border-warning/60" title="Made-up demo data: not a real invention">
+                Synthetic demo data
+              </Badge>
+            )}
             <ScorePill score={tech.ipScore.effective} overridden={!!tech.ipScore.override} />
           </>
         }
@@ -61,7 +69,8 @@ export function TechnologyView() {
           <Section title="Linked patents" count={tech.patents.length}>
             <EntityList
               type="patent"
-              empty="No patents linked yet. Check the Review queue for candidate matches."
+              linkable={false}
+              empty="No confirmed patent or patent application."
               items={tech.patents.map((p) => ({
                 id: p.id,
                 title: `${p.number} · ${p.title}`,
@@ -71,29 +80,32 @@ export function TechnologyView() {
             />
           </Section>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className={tech.similar.length ? "grid grid-cols-1 gap-4 sm:grid-cols-2" : "grid grid-cols-1 gap-4"}>
             <Section title="Inventors" count={tech.inventors.length}>
               <EntityList
                 type="inventor"
-                empty="No inventors known (no linked patents)."
+                linkable={false}
+                empty="No people listed."
                 items={tech.inventors.map((i) => ({ id: i.id, title: i.name, subtitle: i.affiliation ?? "—" }))}
               />
             </Section>
-            <Section title="Similar technologies">
-              <EntityList
-                type="technology"
-                empty="No similar technologies found."
-                items={tech.similar.map((s) => ({
-                  id: s.id,
-                  title: s.label,
-                  aside: (
-                    <span className="font-mono text-xs text-muted-foreground" title="Similarity">
-                      {formatPercent(s.similarity)}
-                    </span>
-                  ),
-                }))}
-              />
-            </Section>
+            {!!tech.similar.length && (
+              <Section title="Similar technologies">
+                <EntityList
+                  type="technology"
+                  empty="No similar technologies found."
+                  items={tech.similar.map((s) => ({
+                    id: s.id,
+                    title: s.label,
+                    aside: (
+                      <span className="font-mono text-xs text-muted-foreground" title="Similarity">
+                        {formatPercent(s.similarity)}
+                      </span>
+                    ),
+                  }))}
+                />
+              </Section>
+            )}
           </div>
         </div>
 
@@ -101,21 +113,25 @@ export function TechnologyView() {
           <Section
             title="IP potential"
             action={
-              <OverrideDialog
-                technologyId={tech.id}
-                technologyTitle={tech.title}
-                ipScore={tech.ipScore}
-                onOverridden={(res) =>
-                  setData({ ...tech, ipScore: res.ipScore, auditLog: [res.auditEntry, ...tech.auditLog] })
-                }
-              />
+              SHOW_SCORE_OVERRIDES && (
+                <OverrideDialog
+                  technologyId={tech.id}
+                  technologyTitle={tech.title}
+                  ipScore={tech.ipScore}
+                  onOverridden={(res) =>
+                    setData({ ...tech, ipScore: res.ipScore, auditLog: [res.auditEntry, ...tech.auditLog] })
+                  }
+                />
+              )
             }
           >
             <ScoreBreakdown ipScore={tech.ipScore} />
           </Section>
-          <Section title="Audit log" count={tech.auditLog.length}>
-            <AuditLog entries={tech.auditLog} />
-          </Section>
+          {SHOW_SCORE_OVERRIDES && (
+            <Section title="Audit log" count={tech.auditLog.length}>
+              <AuditLog entries={tech.auditLog} />
+            </Section>
+          )}
         </div>
       </div>
     </div>

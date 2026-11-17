@@ -1,11 +1,5 @@
-import { Suspense } from "react";
-import { SearchView } from "@/components/search/search-view";
-import { LoadingRows } from "@/components/states";
+import { MatchView } from "@/components/match/match-view";
 
-export default function SearchPage() {
-  return (
-    <Suspense fallback={<LoadingRows />}>
-      <SearchView />
-    </Suspense>
-  );
+export default function MatchPage() {
+  return <MatchView />;
 }

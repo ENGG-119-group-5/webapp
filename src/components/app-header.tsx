@@ -10,10 +10,10 @@ import { AnalystInput } from "./analyst-input";
 import { ThemeToggle } from "./theme-toggle";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
+// Chat, Review, Patent and Inventor pages still exist but are out of the MVP, so not in the nav.
 const NAV = [
-  { href: "/", label: "Search", match: (p: string) => p === "/" || /^\/(technology|patent|inventor)\//.test(p) },
-  { href: "/chat", label: "Chat", match: (p: string) => p.startsWith("/chat") },
-  { href: "/review", label: "Review", match: (p: string) => p.startsWith("/review") },
+  { href: "/", label: "Match", match: (p: string) => p === "/" || p.startsWith("/technology/") },
+  { href: "/search", label: "Search", match: (p: string) => p.startsWith("/search") },
 ];
 
 function ActiveNavLinks() {
