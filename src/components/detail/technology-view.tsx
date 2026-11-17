@@ -17,6 +17,12 @@ import { DetailHeader } from "./detail-header";
 /** Score overrides and their audit log are out of the MVP; flip to bring them back. */
 const SHOW_SCORE_OVERRIDES = false;
 
+/**
+ * Everything about one invention: status and summary, the IP score with its full
+ * breakdown, the patents linked to it (and how sure we are of each link), the people
+ * behind it, and links back to the original TTO and USPTO pages.
+ * It loads the data from the backend's /technology/{id} address.
+ */
 export function TechnologyView() {
   const { id } = useParams<{ id: string }>();
   const { data: tech, error, loading, reload, setData } = useApi(`technology:${id}`, (signal) =>

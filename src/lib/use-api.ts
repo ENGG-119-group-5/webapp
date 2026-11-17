@@ -11,6 +11,11 @@ interface ApiState<T> {
 /**
  * Runs `fetcher` on mount and whenever `key` changes; aborts stale requests.
  * `key` should be a string that uniquely identifies the request.
+ *
+ * In plain words: a small helper every page uses to load data. It gives back three things:
+ * the data, an error if the request failed, and whether it is still loading, so the page
+ * can show a spinner, an error message or the result. If the user moves on before the
+ * answer arrives, the old request is cancelled so it cannot overwrite newer data.
  */
 export function useApi<T>(key: string, fetcher: (signal: AbortSignal) => Promise<T>) {
   const [state, setState] = useState<ApiState<T> & { key: string; nonce: number }>({

@@ -2,6 +2,11 @@
  * In-memory "database" behind the mock API. Writes (score overrides, match
  * decisions) are kept on globalThis so every route handler shares them; they
  * reset when the server restarts.
+ *
+ * In plain words: when the app is not connected to the real backend, the pages still need
+ * something to show. This file plays the role of the backend using made-up sample data
+ * (from fixtures.ts), answering searches and detail requests the same way the real API
+ * does. The route files under src/app/api/mock/ are thin wrappers around these functions.
  */
 import type {
   AuditEntry,

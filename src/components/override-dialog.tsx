@@ -21,6 +21,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
+/**
+ * Pop-up form that lets an analyst replace a computed IP score with their own number,
+ * with a required written reason. (Turned off in the MVP; see technology-view.tsx.)
+ */
 export function OverrideDialog({
   technologyId,
   technologyTitle,

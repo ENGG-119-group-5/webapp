@@ -6,6 +6,11 @@ import { SourceLink } from "./source-link";
 /**
  * Transparent IP-potential score: every indicator's value, weight and
  * contribution, so analysts can see exactly why a technology scores as it does.
+ *
+ * In plain words: the big number is the IP score (0–100). The table lists the six checks
+ * that make it up, what each one found, how much it can be worth, and how many points it
+ * earned. The points add up to the total. If an analyst changed the score by hand, a note
+ * shows who did it, when, and why, and the original computed score is still shown.
  */
 export function ScoreBreakdown({ ipScore }: { ipScore: IpScore }) {
   const total = sumContributions(ipScore.indicators);

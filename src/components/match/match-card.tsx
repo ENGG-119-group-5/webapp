@@ -35,7 +35,15 @@ function ScoreDots({ score }: { score: number }) {
   );
 }
 
-/** One technology's match: label, scores, and the quoted evidence behind each score. */
+/**
+ * One technology's match: label, scores, and the quoted evidence behind each score.
+ *
+ * In plain words: each card shows the invention's name (click it for details), its label
+ * (Strong / Potential / No relevance), its total out of 8, and its IP score. Below that,
+ * four boxes (area, problem, stage, deal) each show 0–2 dots, Claude's reason, and the
+ * quote Claude gave as proof. A green tick means our code found that quote in the
+ * invention's record. An orange warning means it did not, so treat that reason with care.
+ */
 export function MatchCard({ match, rank }: { match: TechnologyMatch; rank: number }) {
   const { technology: t } = match;
   return (
