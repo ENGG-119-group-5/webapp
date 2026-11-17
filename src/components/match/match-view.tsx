@@ -19,7 +19,15 @@ type State =
 // Kept outside React so the results are still there after opening a technology and coming back.
 let lastResult: MatchResponse | null = null;
 
-/** Home page: upload a thesis PDF (or pick a sample) and see the ranked matches. */
+/**
+ * Home page: upload a thesis PDF (or pick a sample) and see the ranked matches.
+ *
+ * In plain words: the page moves through four states. "idle" means waiting for a file.
+ * "matching" means the PDF was sent to the backend and we show a spinner (a new thesis
+ * takes 1–3 minutes because Claude reads every invention). "done" shows the results.
+ * "error" shows what went wrong, with a retry button. The sample buttons download a
+ * sample PDF from the backend and send it through exactly the same path.
+ */
 export function MatchView() {
   const [state, setState] = useState<State>(() => (lastResult ? { step: "done", result: lastResult } : { step: "idle" }));
   const samples = useApi("samples", (signal) => api.listSamples(signal));

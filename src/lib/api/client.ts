@@ -1,3 +1,13 @@
+/**
+ * The one place the web app talks to the backend.
+ *
+ * In plain words: every page asks for data through the `api` object below (for example
+ * `api.search("vaccine")` or `api.match(pdf)`), never by building web requests itself.
+ * Where those requests go is decided by one setting, NEXT_PUBLIC_API_BASE_URL. Set it
+ * (the launcher sets it to http://localhost:8000) to use the real backend. Leave it empty
+ * to use the built-in mock API, which serves placeholder data so the website can be built
+ * and tested without the backend. Errors are turned into a short readable message.
+ */
 import { readNdjson } from "./stream";
 import type {
   ChatEvent,

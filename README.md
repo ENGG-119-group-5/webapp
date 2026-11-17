@@ -16,6 +16,8 @@ Pages:
 
 The Chat, Review, Patent and Inventor pages from the earlier design still exist but are out of the MVP and not in the navigation.
 
+**New here? Start with [docs/how-it-works.md](docs/how-it-works.md)**, a plain-language tour of the pages, how a thesis match works, and where things live in the code.
+
 Built with Next.js 16 (App Router), TypeScript, Tailwind CSS v4 and shadcn/ui (Base UI).
 
 ## Quick start (no backend: sample data)

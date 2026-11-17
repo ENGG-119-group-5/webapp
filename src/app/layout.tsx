@@ -15,6 +15,11 @@ export const metadata: Metadata = {
     "First-pass screening of university technologies: linked TTO listings, patents and inventors with transparent IP-potential scores.",
 };
 
+/**
+ * The frame around every page: fonts, the header bar at the top, and the centred
+ * content area. The small script in <head> applies the saved light/dark theme
+ * before anything is drawn, so the page never flashes the wrong colours.
+ */
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>

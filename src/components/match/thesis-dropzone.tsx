@@ -4,7 +4,8 @@ import { useRef, useState } from "react";
 import { FileUpIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/** Drop a PDF here or click to choose one. Calls onFile with the chosen PDF. */
+/** Drop a PDF here or click to choose one. Calls onFile with the chosen PDF.
+ *  Anything that is not a PDF is refused here, before it is sent anywhere. */
 export function ThesisDropzone({ onFile, disabled }: { onFile: (file: File) => void; disabled?: boolean }) {
   const input = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);

@@ -2,7 +2,13 @@ import type { MatchLabel, MatchResponse } from "@/lib/api/types";
 import { formatDateTime } from "@/lib/format";
 import { LABEL_TEXT, MatchCard } from "./match-card";
 
-/** Thesis summary, counts per label, then the ranked matches ("No relevance" collapsed). */
+/**
+ * Thesis summary, counts per label, then the ranked matches ("No relevance" collapsed).
+ *
+ * In plain words: first a short summary of what the investor is looking for (written by
+ * Claude), then how many inventions fell into each label, then one card per invention,
+ * best first. Inventions with no relevance are folded into a section you click to open.
+ */
 export function MatchResults({ result }: { result: MatchResponse }) {
   const relevant = result.matches.filter((m) => m.label !== "none");
   const none = result.matches.filter((m) => m.label === "none");

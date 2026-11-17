@@ -43,6 +43,11 @@ function NavLinks({ pathname }: { pathname: string | null }) {
   );
 }
 
+/**
+ * The bar at the top of every page: the app name, the Match and Search links, the
+ * light/dark switch, and a "Sample data" badge when the app is not connected to the
+ * real backend (so nobody mistakes placeholder data for real results).
+ */
 export function AppHeader() {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur supports-backdrop-filter:bg-background/70">

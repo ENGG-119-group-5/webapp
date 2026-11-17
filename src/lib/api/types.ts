@@ -6,6 +6,11 @@
  *  - All timestamps are ISO-8601 strings (UTC).
  *  - All scores are on a 0–100 scale.
  *  - Every factual record carries `sources` so the UI can show where it came from.
+ *
+ * In plain words: this is the agreed list of what every answer from the backend looks
+ * like (which fields it has, and whether each is text, a number, and so on). The
+ * backend has the same list in Python (src/api/models.py). If one side changes, the
+ * other must be changed to match, or pages will break.
  */
 
 export type EntityType = "technology" | "patent" | "inventor";

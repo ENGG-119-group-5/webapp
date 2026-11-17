@@ -23,6 +23,11 @@ function parseType(value: string | null): SearchType {
   return TYPES.some((t) => t.value === value) ? (value as SearchType) : "all";
 }
 
+/**
+ * Keyword search with tabs (All / Technologies / Patents / Inventors). The search words
+ * and tab are kept in the page address (?q=...&type=...), so a search can be bookmarked,
+ * shared, or returned to with the back button.
+ */
 export function SearchView() {
   const router = useRouter();
   const params = useSearchParams();
