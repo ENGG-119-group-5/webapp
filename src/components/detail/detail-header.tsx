@@ -21,7 +21,7 @@ export function DetailHeader({
   return (
     <div className="flex flex-col gap-2">
       <Link href="/" className="inline-flex w-fit items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
-        <ChevronLeftIcon className="size-3" /> Search
+        <ChevronLeftIcon className="size-3" /> Matches
       </Link>
       <div className="flex items-center gap-2 text-[11px] font-medium tracking-wide text-muted-foreground uppercase">
         <EntityIcon type={type} className="size-3.5" />
