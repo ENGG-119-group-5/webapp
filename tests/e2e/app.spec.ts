@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("match a sample thesis, open a technology, come back to the results", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByTestId("thesis-dropzone")).toBeVisible();
-  await page.getByRole("button", { name: "immuno-oncology therapeutics fund" }).click();
+  await page.getByRole("button", { name: "immune-engineering therapeutics fund" }).click();
 
   const results = page.getByTestId("match-results");
   await expect(results).toBeVisible();

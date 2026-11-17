@@ -37,10 +37,10 @@ With `NEXT_PUBLIC_API_BASE_URL` unset, the app uses its **built-in mock API**, w
    ```
 3. Open http://localhost:3000 and click a sample thesis, or drop your own PDF.
 
-- **Sample theses** (immuno-oncology fund, climate hardware fund) return **saved real results**: no API key and no cost.
+- **Sample theses** (immune-engineering therapeutics fund, electrification materials fund) return **saved real results**: no API key and no cost.
 - **Your own PDF** needs an Anthropic API key in the **backend's** `.env.local` (`ANTHROPIC_API_KEY=…`). The key never goes in this repo or in the browser.
 
-The demo data is **synthetic**: made-up inventions and patents, marked "Synthetic demo data" in the UI.
+The demo data is **real**: all 41 technologies from Dartmouth's Life Sciences and Physical Sciences licensing decks, merged with the real USPTO records for the patent numbers on those pages.
 
 The full request and response shapes are in **[docs/API_CONTRACT.md](docs/API_CONTRACT.md)**; `src/lib/api/types.ts` is the source of truth.
 
